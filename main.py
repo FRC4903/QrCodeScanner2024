@@ -4,6 +4,7 @@ import os
 
 csv_file_path = "Teams/dataTest1.csv"
 lastValue = ""
+teamNumDisplay = "No Team"
 if not os.path.exists("Teams"):
     os.mkdir("Teams")
 
@@ -43,6 +44,7 @@ while True:
         lastValue = value
         Vl = value.split(",")
         data = Vl
+        teamNumDisplay = data[0]
 
         # Append the data to the CSV file
         with open(csv_file_path, "a", newline='') as f:
@@ -52,17 +54,20 @@ while True:
         print("Data has been scanned")
         print(data)
 
+
     font = cv.FONT_HERSHEY_SIMPLEX
     fontScale = 1.25
     color = (255, 255, 255)
     frame = cv.flip(frame, 1)
 
     # Display the titles with adjusted spacing
-    title_display = "4903 Scanner"
-
-    cv.putText(frame, title_display, (25, 60), font, fontScale, (0, 0, 0), 3, cv.LINE_AA)
-    cv.putText(frame, title_display, (25, 60), font, fontScale, color, 2, cv.LINE_AA)
-    cv.imshow('frame', frame)
+    # title_display = "4903 Scanner"
+    #
+    # cv.putText(frame, title_display, (25, 60), font, fontScale, (0, 0, 0), 3, cv.LINE_AA)
+    # cv.putText(frame, title_display, (25, 60), font, fontScale, color, 2, cv.LINE_AA)
+    cv.putText(frame, teamNumDisplay + " Scanned", (25, 60), font, fontScale, (0, 0, 0), 3, cv.LINE_AA)
+    cv.putText(frame, teamNumDisplay + " Scanned", (25, 60), font, fontScale, color, 2, cv.LINE_AA)
+    cv.imshow('4903 Scanner', frame)
 
     if cv.waitKey(1) == ord('q'):
         break
