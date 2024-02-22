@@ -1,4 +1,4 @@
-import cv2 as cv
+import cv2 as cv # pip install opencv-python
 import csv
 import os
 
