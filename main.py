@@ -2,7 +2,7 @@ import cv2 as cv # pip install opencv-python
 import csv
 import os
 
-csv_file_path = "Teams/dataTest1.csv"
+csv_file_path = "Teams/RawData.csv"
 lastValue = ""
 teamNumDisplay = "No Team"
 if not os.path.exists("Teams"):
@@ -18,7 +18,7 @@ if not os.path.exists(csv_file_path):
             'AutoSourcePickup', 'AutoSpeakerScore', 'AutoAmpScore', 'Defends', 'Defended', 'GroundPickup',
             'SourcePickup', 'ShotsFired', 'ShotsScored', 'ChainFit', 'ScoringAmplifiedSpeaker', 'ScoringUnAmpedSpeaker',
             'ScoringAmp', 'EndgamePark', 'OnstageClimb', 'Harmony', 'Trap', 'SpotLight', 'RP', 'Won', 'Parked',
-            'OnStageClimb', 'NoteInTrap', 'autoAmpScore', 'autoSpeakerScore', 'PreLoaded', 'a', 'b', 'c', 'v', 'w', 'x',
+            'OnStageClimb', 'NoteInTrap', 'a', 'b', 'c', 'v', 'w', 'x',
             'y', 'z', 'ReliabilityComments', 'AutoComments', 'TeleOpComments'
 
         ])
