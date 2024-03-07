@@ -1,7 +1,7 @@
 import cv2 as cv # pip install opencv-python
 import csv
 import os
-
+# pyinstaller --onefile --icon=icon.ico main.py
 csv_file_path = "Teams/RawData.csv"
 lastValue = ""
 teamNumDisplay = "No Team"
@@ -14,17 +14,18 @@ if not os.path.exists(csv_file_path):
     with open(csv_file_path, "a", newline='') as f:
         w = csv.writer(f)
         w.writerow([
-            'team', 'ScouterName', 'MatchNumber', 'UnderStage', 'Broke', 'StartPos', 'Taxi', 'AutoGroundPickup',
-            'AutoSourcePickup', 'AutoSpeakerScore', 'AutoAmpScore', 'Defends', 'Defended', 'GroundPickup',
-            'SourcePickup', 'ShotsFired', 'ShotsScored', 'ChainFit', 'ScoringAmplifiedSpeaker', 'ScoringUnAmpedSpeaker',
-            'ScoringAmp', 'EndgamePark', 'OnstageClimb', 'Harmony', 'Trap', 'SpotLight', 'RP', 'Won', 'Parked',
-            'OnStageClimb', 'NoteInTrap', 'a', 'b', 'c', 'v', 'w', 'x',
-            'y', 'z', 'ReliabilityComments', 'AutoComments', 'TeleOpComments'
+            'team', 'ScouterName', 'MatchNumber', 'UnderStage', 'Broke', 'autoAmpScore', 'autoSpeakerScore', 'StartPos',
+            'Taxi', 'AutoGroundPickup', 'AutoSourcePickup', 'AutoSpeakerScore', 'AutoAmpScore', 'Defended',
+            'DefenseScale', 'GroundPickup', 'SourcePickup', 'ChainFit','SpeakerMisses', 'AmpMisses',
+            'ScoringAmplifiedSpeaker', 'ScoringUnAmpedSpeaker', 'ScoringAmp', 'EndgamePark', 'OnstageClimb',
+            'Harmony', 'Trap', 'SpotLight', 'RP', 'Won', 'Parked', 'OnStageClimb', 'NoteInTrap', 'a', 'b', 'c', 'v',
+            'w', 'x', 'y', 'z', 'ReliabilityComments', 'AutoComments', 'TeleOpComments'
 
         ])
 
 # Start the video capture
 cap = cv.VideoCapture(0)
+
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
@@ -32,6 +33,7 @@ if not cap.isOpened():
 
 while True:
     ret, frame = cap.read()
+    frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     if not ret:
         print("Can't receive frame (stream end?). Exiting ...")
@@ -48,12 +50,13 @@ while True:
 
         # Append the data to the CSV file
         with open(csv_file_path, "a", newline='') as f:
+            while len(data[2]) < 2:
+                data[2] = '0' + data[2]
             w = csv.writer(f)
             w.writerow(data)
 
         print("Data has been scanned")
         print(data)
-
 
     font = cv.FONT_HERSHEY_SIMPLEX
     fontScale = 1.25
@@ -61,8 +64,7 @@ while True:
     frame = cv.flip(frame, 1)
 
     # Display the titles with adjusted spacing
-    # title_display = "4903 Scanner"
-    #
+    # title_display = "4903 Scanner"    #
     # cv.putText(frame, title_display, (25, 60), font, fontScale, (0, 0, 0), 3, cv.LINE_AA)
     # cv.putText(frame, title_display, (25, 60), font, fontScale, color, 2, cv.LINE_AA)
     cv.putText(frame, teamNumDisplay + " Scanned", (25, 60), font, fontScale, (0, 0, 0), 3, cv.LINE_AA)
