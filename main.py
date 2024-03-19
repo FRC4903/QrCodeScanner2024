@@ -1,8 +1,24 @@
-import cv2 as cv # pip install opencv-python
+import cv2 as cv  # pip install opencv-python
 import csv
 import os
+import openpyxl
+
 # pyinstaller --onefile --icon=icon.ico main.py
 csv_file_path = "Teams/RawData.csv"
+xlsx_flie_path = "Teams/Match_Prediction_Sheet.xlsx"
+# import openpyxl as xl
+# wb = openpyxl.Workbook()
+# ws = wb.active
+# mylist = ['dog', 'cat', 'fish', 'bird']
+# ws.append(mylist)
+# wb.save('myFile.xlsx')
+# wb.close()
+
+wb = openpyxl.load_workbook("Teams/Match_Prediction_Sheet.xlsx")
+# Get the current Active Sheet
+wb.active = wb['Raw Data']
+ws = wb.active
+
 lastValue = ""
 teamNumDisplay = "No Team"
 if not os.path.exists("Teams"):
@@ -14,12 +30,15 @@ if not os.path.exists(csv_file_path):
     with open(csv_file_path, "a", newline='') as f:
         w = csv.writer(f)
         w.writerow([
-            'team', 'ScouterName', 'MatchNumber', 'UnderStage', 'Broke', 'autoAmpScore', 'autoSpeakerScore', 'StartPos',
-            'Taxi', 'AutoGroundPickup', 'AutoSourcePickup', 'AutoSpeakerScore', 'AutoAmpScore', 'Defended',
-            'DefenseScale', 'GroundPickup', 'SourcePickup', 'ChainFit','SpeakerMisses', 'AmpMisses',
-            'ScoringAmplifiedSpeaker', 'ScoringUnAmpedSpeaker', 'ScoringAmp', 'EndgamePark', 'OnstageClimb',
-            'Harmony', 'Trap', 'SpotLight', 'RP', 'Won', 'Parked', 'OnStageClimb', 'NoteInTrap', 'a', 'b', 'c', 'v',
-            'w', 'x', 'y', 'z', 'ReliabilityComments', 'AutoComments', 'TeleOpComments'
+            'team', 'ScouterName', 'MatchNumber', 'UnderStage', 'Broke',
+            'autoAmpScore', 'autoSpeakerScore', 'StartPos', 'Taxi', 'AutoGroundPickup', 'AutoSourcePickup',
+            'AutoSpeakerScore', 'AutoAmpScore',
+            'Defended', 'DefenseScale', 'GroundPickup', 'SourcePickup', 'ChainFit',
+            'SpeakerMisses', 'AmpMisses', 'ScoringAmplifiedSpeaker', 'ScoringUnAmpedSpeaker', 'ScoringAmp',
+            'EndgamePark', 'OnstageClimb',
+            'Harmony', 'Trap', 'SpotLight', 'RP', 'Won', 'Parked', 'OnStageClimb', 'NoteInTrap',
+            'a', 'b', 'c', 'v', 'w', 'x', 'y', 'z',
+            'ReliabilityComments', 'AutoComments', 'TeleOpComments'
 
         ])
 
@@ -29,7 +48,6 @@ cap = cv.VideoCapture(0)
 if not cap.isOpened():
     print("Cannot open camera")
     exit()
-
 
 while True:
     ret, frame = cap.read()
@@ -47,11 +65,13 @@ while True:
         Vl = value.split(",")
         data = Vl
         teamNumDisplay = data[0]
-
+        while len(data[2]) < 2:
+            data[2] = '0' + data[2]
         # Append the data to the CSV file
+        ws.append(data)
+        wb.save('Teams/Match_Prediction_Sheet.xlsx')
+        wb.close()
         with open(csv_file_path, "a", newline='') as f:
-            while len(data[2]) < 2:
-                data[2] = '0' + data[2]
             w = csv.writer(f)
             w.writerow(data)
 
@@ -75,5 +95,3 @@ while True:
         break
 cap.release()
 cv.destroyAllWindows()
-
-
